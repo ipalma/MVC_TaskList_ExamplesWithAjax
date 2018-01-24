@@ -1,0 +1,84 @@
+﻿@model IEnumerable<TecExerciseMosaic.Models.Tasks>
+
+@{
+
+    ViewBag.Title = "To Do List";
+}
+
+<h2>Index</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+
+        <div class="form-group">
+            <div class="col-lg-3">
+                @Html.TextBox("txtNewTask", "New Task...", new { @id = "txtNewTask", @class = "form-control" })
+            </div>
+            <div class="">
+                <input type="button" onClick="createTask()" class="btn btn-warning" value="Create Task">
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    @foreach (var item in Model)
+    {
+        <div>
+            <div class="col-md-2">
+                @Html.HiddenFor(modelItem => item.TaskId, new { @id = "id_" + item.TaskId })
+                @Html.CheckBoxFor(modelItem => item.Selected, new Dictionary<string, object> { { "onChange", "tachar(" + item.TaskId + ")" } })
+            </div>
+            <div class="col-md-8">
+                @if (item.Selected)
+                {
+                    <del>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </del>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Description)
+                }
+            </div>
+            <div class="col-md-2">
+                <a href="@Url.Action("DeleteTask", "TaskList", new { id = item.TaskId })" class="btn btn-danger">Remove</a>
+            </div>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+    function tachar(id)
+    {
+        var taskId = id;
+            var link = '@Url.Action("MarkTask", "TaskList", new { id = "taskId" })'
+
+            link = link.replace("taskId", taskId);
+
+            $.ajax({
+                url: link, success: function (result) {
+                    location.reload();
+                }
+            });
+    }
+
+    function createTask()
+    {
+        var link = '@Url.Action("AddTask", "TaskList", new { Description = "description" })'
+
+        var data = $('#txtNewTask').val();
+
+        link = link.replace("description", data);
+
+        $.ajax({
+            url: link, success: function (result) {
+                location.reload();
+            }
+        });
+
+    }
+</script>
