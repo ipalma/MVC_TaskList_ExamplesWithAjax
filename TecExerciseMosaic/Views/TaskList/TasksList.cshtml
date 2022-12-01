@@ -12,7 +12,7 @@
 
         <div class="form-group">
             <div class="col-lg-3">
-                @Html.TextBox("txtNewTask", "New Task...", new { @id = "txtNewTask", @class = "form-control" })
+                @Html.TextBox("txtNewTask", null, new { @id = "txtNewTask", @class = "form-control", placeholder="New Task..." })
             </div>
             <div class="">
                 <input type="button" onClick="createTask()" class="btn btn-warning" value="Create Task">
@@ -50,35 +50,10 @@
     }
 
 </div>
-
 <script type="text/javascript">
-    function tachar(id)
-    {
-        var taskId = id;
-            var link = '@Url.Action("MarkTask", "TaskList", new { id = "taskId" })'
+    var addTasksUrl = '@Url.Action("AddTask", "TaskList", new { Description = "description" })'
+    var markTasksUrl = '@Url.Action("MarkTask", "TaskList", new { id = "taskId" })'
 
-            link = link.replace("taskId", taskId);
-
-            $.ajax({
-                url: link, success: function (result) {
-                    location.reload();
-                }
-            });
-    }
-
-    function createTask()
-    {
-        var link = '@Url.Action("AddTask", "TaskList", new { Description = "description" })'
-
-        var data = $('#txtNewTask').val();
-
-        link = link.replace("description", data);
-
-        $.ajax({
-            url: link, success: function (result) {
-                location.reload();
-            }
-        });
-
-    }
 </script>
+
+<script src="~/Scripts/app/TasksList.js"></script>
